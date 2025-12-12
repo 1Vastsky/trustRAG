@@ -12,7 +12,7 @@ async function buildInput() {
   const poseidon = await circomlibjs.buildPoseidon();
   const F = poseidon.F;
 
-  // 你可以和 Groth16 benchmark 用同一套参数
+
   const leaf = 123n;
   const sk_i = 456n;
   const rid = 789n;
@@ -58,7 +58,7 @@ async function main() {
   const zkeyPath = path.join(__dirname, "..", "build", "vote_plonk.zkey");
 
   if (!fs.existsSync(wasmPath) || !fs.existsSync(zkeyPath)) {
-    console.error("❌ 请先确保已编译 vote.circom 且完成 PLONK setup");
+    console.error("请先确保已编译 vote.circom 且完成 PLONK setup");
     process.exit(1);
   }
 
@@ -66,10 +66,10 @@ async function main() {
   const runs = 10;
   let times = [];
 
-  console.log("🚀 开始 PLONK fullProve 基准测试 (runs =", runs, ")");
+  console.log("开始 PLONK fullProve 基准测试 (runs =", runs, ")");
 
   // Warm-up
-  console.log("⚙️  Warm-up...");
+  console.log("Warm-up...");
   await snarkjs.plonk.fullProve(input, wasmPath, zkeyPath);
 
   for (let i = 0; i < runs; i++) {
@@ -88,7 +88,7 @@ async function main() {
   const avg = times.reduce((a, b) => a + b, 0) / times.length;
   console.log("=======================================");
   console.log(
-    `PLONK fullProve 平均时间: ${avg.toFixed(2)} ms (witness + prove)`
+    `PLONK fullProve 平均时间: ${avg.toFixed(2)} ms`
   );
   console.log("=======================================");
 }

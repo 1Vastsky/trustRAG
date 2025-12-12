@@ -108,6 +108,8 @@ template Main(depth) {
     signal input Null_i;
     signal input rid;
     signal input S_max;
+    signal input doc_id;    // 公共输入，标识这条 vote 评分的是哪一个文档
+
 
     signal input s_i;
     signal input r_i;
@@ -137,5 +139,5 @@ template Main(depth) {
 }
 
 // 在这里声明哪些输入是 public 的
-component main {public [Root_reg, Com_i, Null_i, rid, S_max]} = Main(8);
+component main {public [Root_reg, Com_i, Null_i, rid, S_max, doc_id]} = Main(8);
 // 想调节 Merkle 深度，把 8 改成别的数即可，比如 16

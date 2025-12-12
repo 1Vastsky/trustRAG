@@ -12,13 +12,15 @@ async function buildInput() {
   const poseidon = await circomlibjs.buildPoseidon();
   const F = poseidon.F;
 
-  // 简单参数：你可以按需修改
+
   const leaf = 123n;
   const sk_i = 456n;
   const rid = 789n;
   const s_i = 7n;   // score
   const r_i = 11n;  // commitment randomness
   const S_max = 10n;
+  const doc_id = 12345n; 
+
 
   // Merkle 路径：全部 sibling = 0，pathIndex = 0
   const pathElements = Array(MERKLE_DEPTH).fill(0n);
@@ -46,6 +48,7 @@ async function buildInput() {
     Null_i: Null_i.toString(),
     rid: rid.toString(),
     S_max: S_max.toString(),
+    doc_id: doc_id.toString(),
     s_i: s_i.toString(),
     r_i: r_i.toString(),
     sk_i: sk_i.toString(),
@@ -71,7 +74,7 @@ async function main() {
   const runs = 10; // 连续跑多少次，按需调整
   let times = [];
 
-  console.log("🚀 开始 Groth16 证明生成时间基准测试 (runs =", runs, ")");
+  console.log("Groth16 证明生成时间基准测试 (runs =", runs, ")");
 
   // 先做一次 warm-up
   console.log("⚙️  Warm-up...");
@@ -94,7 +97,7 @@ async function main() {
     times.reduce((acc, x) => acc + x, 0) / (times.length || 1);
   console.log("=======================================");
   console.log(
-    `Groth16 fullProve 平均时间: ${avg.toFixed(2)} ms (包括 witness 计算 + 证明生成)`
+    `Groth16 fullProve 平均时间: ${avg.toFixed(2)} ms`
   );
   console.log("=======================================");
 }
