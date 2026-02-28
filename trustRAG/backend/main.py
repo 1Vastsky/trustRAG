@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent
 DOCS_CSV = BASE_DIR / "docs.csv"
 
 app = FastAPI(
-    title="MedRAG-SPDZ Backend",
+    title="TrustRAG Backend",
     version="0.1.0",
     docs_url="/api-docs",
     redoc_url="/redoc",

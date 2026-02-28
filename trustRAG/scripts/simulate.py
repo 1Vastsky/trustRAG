@@ -1,4 +1,4 @@
-"""End-to-end local simulation for MedRAG-SPDZ demo."""
+"""End-to-end local simulation for TrustRAG demo."""
 
 from __future__ import annotations
 
