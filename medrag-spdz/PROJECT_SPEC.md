@@ -25,3 +25,8 @@ This demo performs BLS verification **off-chain** in Python.
 On-chain, `DataChain.submitAggregate(...)` verifies an ECDSA committee attestation over `(docId, rid, S, R, voteCount, sigmaHash)` instead of doing native BLS pairing verification in Solidity.
 
 Reason: keep Solidity minimal and runnable locally without custom BLS12-381 precompile/pairing integration.
+
+## Pedersen Demo Constraint
+
+The group model uses multiplicative modulo `P`, so exponent arithmetic naturally wraps by group order.
+For deterministic local demo correctness, the simulation samples relatively small blind values `r` (still valid field elements), ensuring the reconstructed `R` used in verification does not wrap unexpectedly.
