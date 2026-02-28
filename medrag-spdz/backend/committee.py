@@ -8,6 +8,9 @@ from typing import Dict
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 
+from backend.shamir import DEFAULT_PRIME
+from backend.spdz_runner import run_spdz_pair
+
 NODE_ID = os.getenv("COMMITTEE_NODE_ID", "unknown")
 
 app = FastAPI(
@@ -73,10 +76,50 @@ def get_shares(rid: int, doc_id: str) -> Dict[str, object]:
 @app.post("/trigger/{rid}/{doc_id}")
 def trigger_aggregation(rid: int, doc_id: str) -> Dict[str, object]:
     doc_bucket = shares.get(rid, {}).get(doc_id, {})
+    if not doc_bucket:
+        return {
+            "node_id": NODE_ID,
+            "rid": rid,
+            "doc_id": doc_id,
+            "status": "no shares",
+            "stored_count": 0,
+        }
+
+    x_values = set()
+    s_values = []
+    r_values = []
+    for item in doc_bucket.values():
+        sx = item["s_share"]["x"]
+        rx = item["r_share"]["x"]
+        if sx != rx:
+            return {
+                "node_id": NODE_ID,
+                "rid": rid,
+                "doc_id": doc_id,
+                "status": "error",
+                "error": "s_share.x and r_share.x mismatch",
+            }
+        x_values.add(sx)
+        s_values.append(item["s_share"]["y"])
+        r_values.append(item["r_share"]["y"])
+
+    if len(x_values) != 1:
+        return {
+            "node_id": NODE_ID,
+            "rid": rid,
+            "doc_id": doc_id,
+            "status": "error",
+            "error": "inconsistent share x values in node storage",
+        }
+
+    x = x_values.pop()
+    s_total, r_total = run_spdz_pair(s_values=s_values, r_values=r_values, p=DEFAULT_PRIME)
     return {
         "node_id": NODE_ID,
         "rid": rid,
         "doc_id": doc_id,
-        "status": "not implemented",
+        "status": "ok",
         "stored_count": len(doc_bucket),
+        "share": {"x": x, "s_y": s_total, "r_y": r_total},
+        "field_prime": DEFAULT_PRIME,
     }

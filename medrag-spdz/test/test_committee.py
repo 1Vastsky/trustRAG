@@ -32,4 +32,8 @@ def test_share_submission_and_query() -> None:
 
     r_trigger = client.post("/trigger/1/doc1")
     assert r_trigger.status_code == 200
-    assert r_trigger.json()["status"] == "not implemented"
+    trigger_body = r_trigger.json()
+    assert trigger_body["status"] == "ok"
+    assert trigger_body["share"]["x"] == 1
+    assert trigger_body["share"]["s_y"] == 123
+    assert trigger_body["share"]["r_y"] == 456

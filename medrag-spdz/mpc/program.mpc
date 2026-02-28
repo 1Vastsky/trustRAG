@@ -1,2 +1,10 @@
-# MP-SPDZ program scaffold
-# TODO: Implement secure aggregation for sum(s) and sum(r).
+from Compiler.types import sint
+from Compiler.library import print_ln
+
+# Compile-time arg: number of values to sum for this node.
+n_values = int(program.args[1])
+total = sint(0)
+for _ in range(n_values):
+    total = total + sint.get_private_input_from(0)
+
+print_ln('%s', total.reveal())
