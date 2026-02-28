@@ -1,0 +1,13 @@
+{
+  "name": "medrag-spdz",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build:contracts": "hardhat compile",
+    "deploy:local": "hardhat run scripts/deploy.js --network hardhat"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.16"
+  }
+}
